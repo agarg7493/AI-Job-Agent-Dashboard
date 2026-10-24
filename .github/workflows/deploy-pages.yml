@@ -1,0 +1,51 @@
+name: Deploy Job Agent Dashboard to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - dashboard-data.json
+      - .github/workflows/deploy-pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: dashboard-pages-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Assemble public site
+        run: |
+          set -euo pipefail
+          test -f index.html
+          test -f dashboard-data.json
+          mkdir -p _site
+          cp index.html dashboard-data.json _site/
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          feed=json.loads(Path('_site/dashboard-data.json').read_text())
+          assert feed.get('schema_version') == 1
+          assert feed.get('visibility') == 'public_jobs_only'
+          assert isinstance(feed.get('jobs'),list)
+          print('Validated public feed with',len(feed['jobs']),'jobs')
+          PY
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
