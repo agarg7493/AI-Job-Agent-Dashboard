@@ -17,17 +17,17 @@ FIELDS = ("Job ID", "Company", "Country", "Job title", "Official URL", "Match %"
 import re
 
 ROLE_PATTERN = re.compile(
-    r"\\b(edi|b2b|mft|managed file transfer|securetransport|secure transport|"
+    r"\b(edi|b2b|mft|managed file transfer|securetransport|secure transport|"
     r"axway|cft|integration engineer|integration architect|integration specialist|"
     r"integration consultant|middleware|ibm mq|ibm ace|websphere|"
     r"sap integration|sap pi|sap po|sap cpi|sap btp|"
     r"solution architect|solutions architect|technical architect|"
-    r"file transfer|trading partner|as2|oftp2)\\b", re.IGNORECASE)
+    r"file transfer|trading partner|as2|oftp2)\b", re.IGNORECASE)
 EXCLUDE_PATTERN = re.compile(
-    r"\\b(sales|account executive|account manager|business development|"
+    r"\b(sales|account executive|account manager|business development|"
     r"marketing|recruiter|recruitment|talent acquisition|"
     r"gtm|go.to.market|field enablement|customer success|"
-    r"sales development|growth account)\\b", re.IGNORECASE)
+    r"sales development|growth account)\b", re.IGNORECASE)
 
 
 def relevant_role(title):
