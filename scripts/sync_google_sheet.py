@@ -12,6 +12,28 @@ RANGE = "'Jobs'!A1:I1000"
 FIELDS = ("Job ID", "Company", "Country", "Job title", "Official URL", "Match %", "Visa evidence", "Status", "Discovered")
 
 
+# Conservative title gate: avoid presenting sales/marketing jobs as candidate matches.
+# This is a discovery relevance gate, NOT a verified skill/visa/ATS match.
+import re
+
+ROLE_PATTERN = re.compile(
+    r"\\b(edi|b2b|mft|managed file transfer|securetransport|secure transport|"
+    r"axway|cft|integration engineer|integration architect|integration specialist|"
+    r"integration consultant|middleware|ibm mq|ibm ace|websphere|"
+    r"sap integration|sap pi|sap po|sap cpi|sap btp|"
+    r"solution architect|solutions architect|technical architect|"
+    r"file transfer|trading partner|as2|oftp2)\\b", re.IGNORECASE)
+EXCLUDE_PATTERN = re.compile(
+    r"\\b(sales|account executive|account manager|business development|"
+    r"marketing|recruiter|recruitment|talent acquisition|"
+    r"gtm|go.to.market|field enablement|customer success|"
+    r"sales development|growth account)\\b", re.IGNORECASE)
+
+
+def relevant_role(title):
+    return bool(ROLE_PATTERN.search(title)) and not bool(EXCLUDE_PATTERN.search(title))
+
+
 def build_feed(values):
     if not values or tuple(values[0][:len(FIELDS)]) != FIELDS:
         raise ValueError("Unexpected Jobs sheet header; refusing to publish")
@@ -22,7 +44,7 @@ def build_feed(values):
         job_id, company, country, title, url, _, _, status, _ = row[:len(FIELDS)]
         if not all(isinstance(x, str) and x.strip() for x in (job_id, company, country, title, url)):
             continue
-        if not url.startswith("https://") or url in seen:
+        if not url.startswith("https://") or url in seen or not relevant_role(title):
             continue
         seen.add(url)
         jobs.append({"title": title, "company": company, "country": country,
