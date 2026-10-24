@@ -1,16 +1,11 @@
-"""Export public vacancy fields from the private Job Agent Google Sheet.
-
-Requires GOOGLE_SERVICE_ACCOUNT_JSON secret. The sheet remains private and
-must be explicitly shared with the service account's email (Viewer).
-"""
+"""Publish non-sensitive job fields from the private Google Sheet using GitHub OIDC."""
 import json
-import os
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import quote
 
+import google.auth
 from google.auth.transport.requests import AuthorizedSession
-from google.oauth2.service_account import Credentials
 
 SPREADSHEET_ID = "1QvTor1ImDYxzmNfa-uVPqEu5rNAi4iwgGg7mQUNwZgc"
 RANGE = "'Jobs'!A1:I1000"
@@ -27,9 +22,7 @@ def build_feed(values):
         job_id, company, country, title, url, _, _, status, _ = row[:len(FIELDS)]
         if not all(isinstance(x, str) and x.strip() for x in (job_id, company, country, title, url)):
             continue
-        if not url.startswith("https://"):
-            continue
-        if url in seen:
+        if not url.startswith("https://") or url in seen:
             continue
         seen.add(url)
         jobs.append({"title": title, "company": company, "country": country,
@@ -39,9 +32,8 @@ def build_feed(values):
 
 
 def main():
-    info = json.loads(os.environ["GOOGLE_SERVICE_ACCOUNT_JSON"])
-    credentials = Credentials.from_service_account_info(
-        info, scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"])
+    credentials, _ = google.auth.default(
+        scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"])
     session = AuthorizedSession(credentials)
     endpoint = f"https://sheets.googleapis.com/v4/spreadsheets/{SPREADSHEET_ID}/values/{quote(RANGE, safe='')}"
     response = session.get(endpoint, timeout=30)
