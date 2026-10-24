@@ -2,6 +2,9 @@ name: Sync approved Google Sheet jobs to public dashboard
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/sync-google-sheet.yml
   schedule:
     - cron: "*/15 * * * *"
 
