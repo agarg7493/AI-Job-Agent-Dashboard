@@ -1,47 +1,6 @@
 {
   "schema_version": 1,
   "visibility": "public_jobs_only",
-  "generated_at": "2026-10-24T21:57:07.131952+00:00",
-  "jobs": [
-    {
-      "title": "Growth Account Executive",
-      "company": "Greenhouse",
-      "country": "Ireland",
-      "location": "",
-      "url": "https://job-boards.greenhouse.io/greenhouse/jobs/8168227?gh_jid=8168227",
-      "status": "Discovered — match not reviewed"
-    },
-    {
-      "title": "Sales Development Representative",
-      "company": "Greenhouse",
-      "country": "Ireland",
-      "location": "",
-      "url": "https://job-boards.greenhouse.io/greenhouse/jobs/8280039?gh_jid=8280039",
-      "status": "Discovered — match not reviewed"
-    },
-    {
-      "title": "Senior Account Executive, Mid-Market",
-      "company": "Greenhouse",
-      "country": "Ireland",
-      "location": "",
-      "url": "https://job-boards.greenhouse.io/greenhouse/jobs/8168281?gh_jid=8168281",
-      "status": "Discovered — match not reviewed"
-    },
-    {
-      "title": "Senior Program Manager, GTM & Field Enablement",
-      "company": "Greenhouse",
-      "country": "Ireland",
-      "location": "",
-      "url": "https://job-boards.greenhouse.io/greenhouse/jobs/8211770?gh_jid=8211770",
-      "status": "Discovered — match not reviewed"
-    },
-    {
-      "title": "Strategic Consultant",
-      "company": "Greenhouse",
-      "country": "Ireland",
-      "location": "",
-      "url": "https://job-boards.greenhouse.io/greenhouse/jobs/8222047?gh_jid=8222047",
-      "status": "Discovered — match not reviewed"
-    }
-  ]
+  "generated_at": "2026-10-24T23:59:00+00:00",
+  "jobs": []
 }
