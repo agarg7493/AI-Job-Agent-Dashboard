@@ -6,7 +6,7 @@ on:
     paths:
       - .github/workflows/sync-google-sheet.yml
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "*/5 * * * *"
 
 permissions:
   contents: write
